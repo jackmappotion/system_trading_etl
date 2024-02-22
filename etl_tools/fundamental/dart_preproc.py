@@ -1,8 +1,9 @@
 import pandas as pd
+from typing import Optional
 
 
 class FundamentalPreProc:
-    def __init__(self, fundamentals) -> None:
+    def __init__(self, fundamentals: pd.DataFrame) -> None:
         self.fundamentals = fundamentals
 
     def __call__(self, fs_nm: str):
@@ -22,13 +23,13 @@ class FundamentalPreProc:
         return fundamental
 
     @staticmethod
-    def value2numeric(value):
+    def value2numeric(value: str) -> Optional[int]:
         if value == "-":
             return None
         return int(value.replace(",", ""))
 
     @staticmethod
-    def slice_columns(df):
+    def slice_columns(df: pd.DataFrame) -> pd.DataFrame:
         using_columns = [
             "reprt_date",
             "reprt_code",
@@ -43,25 +44,24 @@ class FundamentalPreProc:
         sliced_df = df.loc[:, using_columns]
         return sliced_df
 
+
 class CorpPreProc:
-    def __init__(self, corps):
+    def __init__(self, corps: pd.DataFrame) -> None:
         self.corps = corps
-    
+
     @staticmethod
-    def rename_columns(df):
-        column_rename_dict = {
-                "corp_name":"stock_nm"
-                } 
+    def rename_columns(df: pd.DataFrame) -> pd.DataFrame:
+        column_rename_dict = {"corp_name": "stock_nm"}
         renamed_df = df.rename(columns=column_rename_dict)
         return renamed_df
 
     @staticmethod
-    def slice_columns(df):
-        using_columns = ["stock_code","stock_nm","sector",'product']
-        sliced_df = df.loc[:,using_columns]
+    def slice_columns(df: pd.DataFrame) -> pd.DataFrame:
+        using_columns = ["stock_code", "stock_nm", "sector", "product"]
+        sliced_df = df.loc[:, using_columns]
         return sliced_df
 
-    def __call__(self):
+    def __call__(self) -> pd.DataFrame:
         corps = self.corps.copy()
         corps = self.rename_columns(corps)
         corps = self.slice_columns(corps)
