@@ -42,3 +42,27 @@ class FundamentalPreProc:
         ]
         sliced_df = df.loc[:, using_columns]
         return sliced_df
+
+class CorpPreProc:
+    def __init__(self, corps):
+        self.corps = corps
+    
+    @staticmethod
+    def rename_columns(df):
+        column_rename_dict = {
+                "corp_name":"stock_nm"
+                } 
+        renamed_df = df.rename(columns=column_rename_dict)
+        return renamed_df
+
+    @staticmethod
+    def slice_columns(df):
+        using_columns = ["stock_code","stock_nm","sector",'product']
+        sliced_df = df.loc[:,using_columns]
+        return sliced_df
+
+    def __call__(self):
+        corps = self.corps.copy()
+        corps = self.rename_columns(corps)
+        corps = self.slice_columns(corps)
+        return corps
