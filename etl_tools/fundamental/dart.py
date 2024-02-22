@@ -1,16 +1,16 @@
 import os
 import requests
 import pandas as pd
-
+from typing import List
 import dart_fss
 
 
 class DartFss:
-    def __init__(self, api_key) -> None:
+    def __init__(self, api_key: str) -> None:
         dart_fss.set_api_key(api_key)
         self.dart_fss = dart_fss
 
-    def load_corps(self, only_public=True):
+    def load_corps(self, only_public: bool = True) -> pd.DataFrame:
         corp_list = dart_fss.get_corp_list()
         corps = pd.DataFrame([corp.info for corp in corp_list])
         if only_public:
@@ -19,23 +19,23 @@ class DartFss:
 
 
 class DartExtractor:
-    def __init__(self, api_key) -> None:
+    def __init__(self, api_key: str) -> None:
         self.api_key = api_key
         self.base_url = "https://opendart.fss.or.kr/api"
 
-    def load_fundamental(self, corp: str, year: str, reprt: str):
+    def load_fundamental(self, corp: str, year: str, reprt: str) -> pd.DataFrame:
         _url = self._format_url("fnlttSinglAcnt.json")
         _params = self._format_params(corp_code=corp, bsns_year=year, reprt_code=reprt)
         data = self._load_data(url=_url, params=_params)
         return data
 
-    def _load_fundamentals(self, corps: str, year: str, reprt: str):
+    def _load_fundamentals(self, corps: str, year: str, reprt: str) -> pd.DataFrame:
         _url = self._format_url("fnlttMultiAcnt.json")
         _params = self._format_params(corp_code=corps, bsns_year=year, reprt_code=reprt)
         data = self._load_data(url=_url, params=_params)
         return data
 
-    def load_fundamentals(self, corps: list, year: str, reprt: str):
+    def load_fundamentals(self, corps: list, year: str, reprt: str) -> pd.DataFrame:
         fundamentals_list = list()
         corps_list = self._get_chunked_list(corps, 99)
         for corps in corps_list:
@@ -45,7 +45,7 @@ class DartExtractor:
         data = pd.concat(fundamentals_list, axis=0)
         return data
 
-    def _load_data(self, url, params):
+    def _load_data(self, url: str, params: dict) -> pd.DataFrame:
         try:
             resp = requests.get(url=url, params=params)
         except requests.exceptions.SSLError:
@@ -68,15 +68,15 @@ class DartExtractor:
             print("Error decoding JSON from resp")
             return pd.DataFrame()
 
-    def _format_url(self, theme):
+    def _format_url(self, theme: str) -> str:
         url = os.path.join(self.base_url, theme)
         return url
 
-    def _format_params(self, **kwargs):
+    def _format_params(self, **kwargs) -> dict:
         params = {**kwargs}
         params["crtfc_key"] = self.api_key
         return params
 
     @staticmethod
-    def _get_chunked_list(_list, n):
+    def _get_chunked_list(_list: list, n: int) -> List[List]:
         return [_list[i : i + n] for i in range(0, len(_list), n)]
