@@ -1,3 +1,4 @@
+import pandas as pd
 from tqdm import tqdm
 import FinanceDataReader as fdr
 
@@ -28,3 +29,5 @@ class FdrExtractor:
                 ohlcv_list.append(ohlcv)
             except:
                 print(stock_code)
+        ohlcvs = pd.concat(ohlcv_list,axis=0)
+        return ohlcvs
