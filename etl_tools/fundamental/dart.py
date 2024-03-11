@@ -6,6 +6,10 @@ import dart_fss
 
 
 class DartFss:
+    """
+    dart-fss : external libaray
+    - load corpinfo
+    """
     def __init__(self, api_key: str) -> None:
         dart_fss.set_api_key(api_key)
         self.dart_fss = dart_fss
@@ -19,6 +23,10 @@ class DartFss:
 
 
 class DartExtractor:
+    """
+    DartExtractor
+    - load fundamentals
+    """
     def __init__(self, api_key: str) -> None:
         self.api_key = api_key
         self.base_url = "https://opendart.fss.or.kr/api"
