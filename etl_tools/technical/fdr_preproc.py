@@ -2,6 +2,9 @@ import pandas as pd
 
 
 class OhlcvPreProc:
+    """
+    Preprocess Ohlcv DataFrame
+    """
     def __init__(self, ohlcvs: pd.DataFrame) -> None:
         self.ohlcvs = ohlcvs
 
@@ -23,6 +26,9 @@ class OhlcvPreProc:
 
 
 class StockPreProc:
+    """
+    Preprocess StockInfo DataFrame
+    """
     def __init__(self, stocks: pd.DataFrame) -> None:
         self.stocks = stocks
 
