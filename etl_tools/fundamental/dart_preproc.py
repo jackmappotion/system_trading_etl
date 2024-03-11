@@ -3,6 +3,9 @@ from typing import Optional
 
 
 class FundamentalPreProc:
+    """
+    Prepocess Fundamental DataFrame
+    """
     def __init__(self, fundamentals: pd.DataFrame) -> None:
         self.fundamentals = fundamentals
 
