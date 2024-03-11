@@ -7,6 +7,11 @@ date = dt.date | str
 
 
 class FdrExtractor:
+    """
+    FinanceDataReader : external library
+    - load stockinfo
+    - load ohlcv
+    """
     def __init__(self) -> None:
         self.fdr = fdr
 
